@@ -92,6 +92,23 @@ namespace C__Advanced_Assignmen_2
             return result;
         }
         #endregion
+
+        #region Filter Products
+        public static List<Product> FilterProducts(List<Product> products, Predicate<Product> match)
+        {
+            List<Product> result = new List<Product>();
+
+            foreach (var product in products)
+            {
+                if (match(product))
+                {
+                    result.Add(product);
+                }
+            }
+
+            return result;
+        }
+        #endregion
         static void Main(string[] args)
         {
         #region Task_1
@@ -140,6 +157,15 @@ namespace C__Advanced_Assignmen_2
             }
             #endregion
 
+        #region Low-Stock Alert
+            Console.WriteLine("--- Low Stock Alert ---");
+            List<Product> lowStockProducts = FilterProducts(catalog, p => p.Stock < 20);
+
+            foreach (var product in lowStockProducts)
+            {
+                Console.WriteLine($"[LOW STOCK] {product.Name}: only {product.Stock} left!");
+            }
+            #endregion
 
         }
     }  
