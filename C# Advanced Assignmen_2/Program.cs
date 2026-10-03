@@ -78,6 +78,20 @@ namespace C__Advanced_Assignmen_2
             }
         }
         #endregion
+
+        #region Transform Products
+        public static List<TResult> TransformProducts<TResult>(List<Product> products, Func<Product, TResult> transformer)
+        {
+            List<TResult> result = new List<TResult>();
+
+            foreach (var product in products)
+            {
+                result.Add(transformer(product));
+            }
+
+            return result;
+        }
+        #endregion
         static void Main(string[] args)
         {
         #region Task_1
@@ -106,6 +120,24 @@ namespace C__Advanced_Assignmen_2
 
             Console.WriteLine("--- Detailed Report ---");
             PrintReport(catalog, p => Console.WriteLine($"[{p.Category}] {p.Name} | Price: ${p.Price} | Stock: {p.Stock}"));
+            #endregion
+
+        #region transform Products
+            Console.WriteLine("--- Summary List ---");
+            List<string> summaryList = TransformProducts(catalog, p => $"{p.Name} (${p.Price})");
+            foreach (var item in summaryList)
+            {
+                Console.WriteLine(item);
+            }
+
+            Console.WriteLine();
+
+            Console.WriteLine("--- Price Labels ---");
+            List<string> priceLabels = TransformProducts(catalog, p => $"{p.Name}: {(p.Price > 100 ? "Expensive!" : "Affordable")}");
+            foreach (var item in priceLabels)
+            {
+                Console.WriteLine(item);
+            }
             #endregion
 
 
