@@ -1,6 +1,8 @@
-﻿namespace C__Advanced_Assignmen_2
+﻿using System.Collections;
+using System.Xml.Linq;
+
+namespace C__Advanced_Assignmen_2
 {
-   
     internal class Program
     {
         #region Product Model 
@@ -11,17 +13,20 @@
         public string Category { get; set; } // "Electronics", "Clothing", "Food", "Books" 
         public double Price { get; set; }
         public int Stock { get; set; }
-    }
+     
+            public override string ToString()
+        {
+            return $"{Name} - ${Price} (Stock: {Stock})";
+        }
+        }
 
-    #endregion
-
-        #region Product Catalog  
-
-    
+       
         #endregion
+
+
         #region Product Catalog  
-List<Product> catalog = new()
-{
+        static List<Product> catalog = new()
+        {
     new Product { Id=1, Name="Laptop", Category="Electronics", Price=1200, Stock=10 },
     new Product { Id=2,Name="Phone", Category="Electronics", Price=800, Stock=25 },
     new Product { Id=3, Name="T-Shirt", Category="Clothing", Price=30, Stock=100 },
@@ -33,13 +38,56 @@ List<Product> catalog = new()
     new Product { Id=9,Name="Headphones", Category="Electronics", Price=150, Stock=40 },
     new Product { Id=10, Name="Jacket", Category="Clothing", Price=120, Stock=15 }
 };
-    
-    #endregion
+
+        #endregion
+
+        #region Smart Product Search  
+        public static List<Product> SearchProducts(List<Product> products, Func<Product, bool> filter)
+        {
+            List<Product> result = new List<Product>();
+
+            foreach (var product in products)
+            {
+                if (filter(product))
+                {
+                    result.Add(product);
+                }
+            }
+
+            return result;
+        }
 
 
+        static void PrintProducts(List<Product> products)
+        {
+            foreach (var product in products)
+            {
+                Console.WriteLine(product);
+            }
+            Console.WriteLine();
+        }
+
+        #endregion
         static void Main(string[] args)
         {
+        #region Task_1
+            Console.WriteLine("--- Electronics ---");
+            var electronics = SearchProducts(catalog, p => p.Category == "Electronics");
+            PrintProducts(electronics);
 
+            Console.WriteLine("--- Under $50 ---");
+            var cheapProducts = SearchProducts(catalog, p => p.Price < 50);
+            PrintProducts(cheapProducts);
+
+            Console.WriteLine("--- In Stock ---");
+            var inStockProducts = SearchProducts(catalog, p => p.Stock > 0);
+            PrintProducts(inStockProducts);
+
+            Console.WriteLine("--- Clothing Under $100 ---");
+            var cheapClothing = SearchProducts(catalog, p => p.Category == "Clothing" && p.Price < 100);
+            PrintProducts(cheapClothing);
         }
     }
+        #endregion
 }
+    
