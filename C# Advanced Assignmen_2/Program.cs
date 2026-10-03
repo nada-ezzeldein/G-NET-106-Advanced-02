@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Drawing;
 using System.Xml.Linq;
 
 namespace C__Advanced_Assignmen_2
@@ -22,7 +23,6 @@ namespace C__Advanced_Assignmen_2
 
        
         #endregion
-
 
         #region Product Catalog  
         static List<Product> catalog = new()
@@ -68,6 +68,16 @@ namespace C__Advanced_Assignmen_2
         }
 
         #endregion
+
+        #region Custom Report Generator
+        public static void PrintReport(List<Product> products, Action<Product> printAction)
+        {
+            foreach (var product in products)
+            {
+                printAction(product);
+            }
+        }
+        #endregion
         static void Main(string[] args)
         {
         #region Task_1
@@ -86,8 +96,20 @@ namespace C__Advanced_Assignmen_2
             Console.WriteLine("--- Clothing Under $100 ---");
             var cheapClothing = SearchProducts(catalog, p => p.Category == "Clothing" && p.Price < 100);
             PrintProducts(cheapClothing);
+            #endregion
+
+        #region Print Reports 
+            Console.WriteLine("--- Short Report ---");
+            PrintReport(catalog, p => Console.WriteLine($"{p.Name} - ${p.Price}"));
+
+            Console.WriteLine();
+
+            Console.WriteLine("--- Detailed Report ---");
+            PrintReport(catalog, p => Console.WriteLine($"[{p.Category}] {p.Name} | Price: ${p.Price} | Stock: {p.Stock}"));
+            #endregion
+
+
         }
-    }
-        #endregion
+    }  
 }
     
